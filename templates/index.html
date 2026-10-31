@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <title>Global Olympic Sports Analysis</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111c2e;
+      --panel-2: #17243a;
+      --text: #eef4ff;
+      --muted: #9eacc2;
+      --accent: #55c2ff;
+      --border: rgba(255,255,255,.10);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; color: var(--text);
+      background: radial-gradient(circle at top right, #183454 0, var(--bg) 42%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    header {
+      padding: 24px clamp(18px, 4vw, 56px) 18px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(11,18,32,.82);
+    }
+    .topline {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .rings {
+      width: 42px; height: 42px; display: grid; place-items: center;
+      border-radius: 13px; background: linear-gradient(135deg,#1c9bd1,#6659db);
+      font-size: 23px;
+    }
+    h1 { margin: 0; font-size: clamp(20px, 3vw, 29px); letter-spacing: -.6px; }
+    .subtitle { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+    .live { color: #9de6c0; font-size: 12px; }
+    main { padding: 24px clamp(12px, 3vw, 40px) 34px; max-width: 1600px; margin: auto; }
+    .intro { margin: 0 0 18px; }
+    .intro h2 { margin: 0 0 5px; font-size: 19px; }
+    .intro p { margin: 0; color: var(--muted); font-size: 13px; }
+    .tabs {
+      display: flex; gap: 9px; flex-wrap: wrap; margin: 20px 0 14px;
+    }
+    .tab {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 11px 17px; border: 1px solid var(--border); border-radius: 10px;
+      color: var(--muted); background: var(--panel); text-decoration: none;
+      font-size: 13px; font-weight: 650; transition: .18s ease;
+    }
+    .tab:hover { color: var(--text); border-color: rgba(85,194,255,.55); }
+    .tab.active {
+      color: #061321; background: var(--accent); border-color: var(--accent);
+    }
+    .viz-shell {
+      overflow: hidden; border: 1px solid var(--border); border-radius: 15px;
+      background: #fff; box-shadow: 0 18px 55px rgba(0,0,0,.28);
+    }
+    .viz-frame { width: 100%; height: min(78vh, 900px); min-height: 560px; border: 0; display: block; }
+    footer { color: var(--muted); text-align: center; font-size: 12px; padding: 18px 10px 0; }
+    @media (max-width: 600px) {
+      header { padding-top: 18px; }
+      .tab { flex: 1 1 100%; }
+      .viz-frame { min-height: 500px; height: 72vh; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topline">
+      <div class="brand">
+        <div class="rings" aria-hidden="true">🏅</div>
+        <div>
+          <h1>Global Olympic Sports Analysis</h1>
+          <p class="subtitle">Interactive Tableau story & dashboards</p>
+        </div>
+      </div>
+      <div class="live">● Tableau Public</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>{{ views[selected].label }}</h2>
+      <p>Explore Olympic sports insights using the navigation tabs below.</p>
+    </section>
+
+    <nav class="tabs" aria-label="Tableau views">
+      {% for key, item in views.items() %}
+        <a class="tab {% if selected == key %}active{% endif %}"
+           href="{{ url_for('index', view=key) }}"
+           {% if selected == key %}aria-current="page"{% endif %}>
+          {{ item.label }}
+        </a>
+      {% endfor %}
+    </nav>
+
+    <section class="viz-shell" aria-label="{{ views[selected].label }} visualization">
+      <iframe
+        class="viz-frame"
+        src="{{ tableau_url }}"
+        title="{{ views[selected].label }} - Global Olympic Sports Analysis"
+        loading="lazy"
+        allowfullscreen>
+      </iframe>
+    </section>
+
+    <footer>Data visualization hosted on Tableau Public · Navigation stays within this website</footer>
+  </main>
+</body>
+</html>
