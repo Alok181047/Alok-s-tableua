@@ -1,27 +1,36 @@
-# Global Olympic Sports Analysis – Flask + Tableau
+# Olympic Tableau Portal (Flask + Render)
 
 ## Files
-- `app.py`: Flask application and view routing
-- `templates/index.html`: responsive page with Story / Dashboard 1 / Dashboard 2 tabs
-- `requirements.txt`: Python dependencies
-- `Procfile`: Render start command
-- `runtime.txt`: Python runtime
+- `app.py`: Flask server.
+- `templates/index.html`: dashboard/story page with two navigation tabs.
+- `requirements.txt`: Python dependencies.
+- `Procfile`: production start command.
+- `render.yaml`: optional Render Blueprint configuration.
 
 ## Run locally
 ```bash
-python -m venv venv
-# Windows: venv\Scripts\activate
-# macOS/Linux: source venv/bin/activate
+python -m venv .venv
+source .venv/bin/activate   # macOS/Linux
 pip install -r requirements.txt
 python app.py
 ```
-Open http://127.0.0.1:5000
+Open https://alok-s-tableua.onrender.com/
 
 ## Deploy on Render
-1. Push these files to a GitHub repository.
-2. In Render, choose **New + → Web Service** and connect the repository.
+1. Upload these files to a GitHub repository.
+2. In Render, choose New > Web Service and connect the repository.
 3. Build command: `pip install -r requirements.txt`
 4. Start command: `gunicorn app:app`
-5. Choose a free/appropriate instance and deploy.
+5. Deploy.
 
-The Tableau views must be published and publicly embeddable on Tableau Public.
+## Configure the Tableau Story
+The dashboard URL was supplied. The exact Story URL is not yet known, so the Story tab shows instructions until you configure it.
+In Render: open your service > Environment > Add Environment Variable:
+- Key: `TABLEAU_STORY_URL`
+- Value: the published Tableau Story URL (get it from Tableau Public using Share > Copy Link)
+Save changes and redeploy if prompted.
+
+Optional environment variable:
+- `TABLEAU_DASHBOARD_URL`: overrides the dashboard URL.
+
+Note: Tableau Public views are public. Only publish data you are comfortable making publicly accessible.
